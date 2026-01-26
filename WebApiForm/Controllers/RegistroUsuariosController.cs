@@ -122,6 +122,8 @@ namespace WebApiForm.Controllers
             //esto se hace cuando la tabla en la cual se le quiera adaptar un trigger tenga un id de tipo varchar/String
             try
             {
+                registroUsuario.FechaCreacion = DateTime.Now.ToString("dd-MM-yyyy");
+
                 // Asignar un valor temporal a IdUsuarios
                 registroUsuario.IdUsuarios = "TEMP_" + Guid.NewGuid().ToString();
 
@@ -166,7 +168,7 @@ namespace WebApiForm.Controllers
                         return BadRequest(new { message = "El correo electrónico ya esta en uso." });
                     }
 
-                    return BadRequest(new { message = "Valor único!!!, ya está registrado exitozamente.", details });
+                    //return BadRequest(new { message = "Valor único!!!, Este campo ya existe.", details });
                 }
 
                 // Capturar otros errores de base de datos

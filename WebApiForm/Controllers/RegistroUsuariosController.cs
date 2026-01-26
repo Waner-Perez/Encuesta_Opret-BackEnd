@@ -168,7 +168,7 @@ namespace WebApiForm.Controllers
                         return BadRequest(new { message = "El correo electrónico ya esta en uso." });
                     }
 
-                    //return BadRequest(new { message = "Valor único!!!, Este campo ya existe.", details });
+                    return BadRequest(new { message = "Valor único!!!, Este campo ya existe.", details });
                 }
 
                 // Capturar otros errores de base de datos

@@ -113,16 +113,30 @@ namespace WebApiForm.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSesion(int id)
         {
-            var sesion = await _context.Sesions.FindAsync(id);
-            if (sesion == null)
+            try
             {
-                return NotFound();
+                var sesion = await _context.Sesions.FindAsync(id);
+                if (sesion == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Sesions.Remove(sesion);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
+            catch(DbUpdateException dbEx)
+            {
+                if (dbEx.InnerException != null && dbEx.InnerException.Message.Contains("fk_Respuestas_Sesion")) 
+                    return BadRequest(new { message = "Lo sentimos esta Sección de pregunta esta siendo utilizado en la tabla de Respuestas por lo que no se podra elimiar." });
 
-            _context.Sesions.Remove(sesion);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                return BadRequest(new { message = "Ocurrió un error en la base de datos", details = dbEx.InnerException?.Message ?? dbEx.Message });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { message = "Ocurrió un error inesperado", details = ex.Message });
+            }
         }
 
         private bool SesionExists(int id)

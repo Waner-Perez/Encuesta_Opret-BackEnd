@@ -114,7 +114,7 @@ namespace WebApiForm.Controllers
             {
                 if(dbEx.InnerException != null && dbEx.InnerException.Message.Contains("fk_Sesion_Pregunta"))
                 {
-                    return BadRequest(new { message = "Esta pregunta esta siendo utilizado en la tabla Sesión. SI quieres eliminarlo deberas de borrarlo primero en la tabla de Sesión" });
+                    return BadRequest(new { message = "Esta pregunta esta siendo utilizado en la tabla Sección. SI quieres eliminarlo deberas de borrarlo primero en la tabla de Sección" });
                 }
                 
                 return BadRequest(new { message = "Ocurrió un error en la base de datos", details = dbEx.InnerException?.Message ?? dbEx.Message });

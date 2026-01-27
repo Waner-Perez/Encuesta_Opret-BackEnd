@@ -20,7 +20,12 @@ namespace WebApiForm.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Sesion>>> GetSesions()
         {
-            return await _context.Sesions.ToListAsync();
+            var result = await _context.Sesions.ToListAsync();
+
+            //var preguntasResult = await _context.Preguntas.Where(p => result.Select(s => s.CodPregunta).Contains(p.CodPregunta)).ToListAsync();
+
+            //return preguntasResult;
+            return result;
         }
 
         // GET: api/Sesions/5

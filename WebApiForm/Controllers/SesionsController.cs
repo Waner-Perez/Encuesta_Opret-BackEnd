@@ -26,7 +26,11 @@ namespace WebApiForm.Controllers
                     IdSesion = s.IdSesion,
                     TipoRespuesta = s.TipoRespuesta,
                     GrupoTema = s.GrupoTema,
+
+                    CodPregunta = s.CodPregunta, 
                     Pregunta = s.CodPreguntaNavigation!.Pregunta1,
+
+                    CodSubPregunta = s.CodSubPregunta, 
                     SubPregunta = s.CodSubPreguntaNavigation != null
                         ? s.CodSubPreguntaNavigation.SubPreguntas
                         : null,
@@ -38,6 +42,7 @@ namespace WebApiForm.Controllers
 
             return Ok(result);
         }
+
 
         // GET: api/Sesions/5
         [HttpGet("{id}")]

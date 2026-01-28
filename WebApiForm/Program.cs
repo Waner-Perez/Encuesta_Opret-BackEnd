@@ -71,6 +71,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+
+
 // Registrar el servicio en vace a stored procedure
 builder.Services.AddScoped<FormularioRepository>();
 //--------------------------------------------------------
@@ -79,7 +81,7 @@ builder.Services.AddScoped<PreguntaCompletaService>();
 builder.Services.AddScoped<RespuestaService>();
 builder.Services.AddScoped<FormularioServices>();
 builder.Services.AddScoped<ExcelExportService>();
-builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.AddSingleton<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<PasswordRecoveryService>();
 builder.Services.AddMemoryCache();
 //--------------------------------------------------------

@@ -117,7 +117,11 @@ public partial class FormEncuestaDbContext : DbContext
         {
             entity.HasKey(e => e.IdSesion).HasName("PK__Sesion__8D3F9DFEE97AF766");
 
-            entity.ToTable("Sesion", tb => tb.HasTrigger("trg_increment_Sesion"));
+            entity.ToTable("Sesion", tb =>
+                {
+                    tb.HasTrigger("trg_increment_Sesion");
+                    tb.HasTrigger("trg_reordenar_grupo_tema");
+                });
 
             entity.Property(e => e.IdSesion).ValueGeneratedNever();
 

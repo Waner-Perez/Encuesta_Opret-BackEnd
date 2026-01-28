@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApiForm.Repository.Models;
 using WebApiForm.Repository;
+using WebApiForm.Repository.Models;
 
 namespace WebApiForm.Controllers
 {
@@ -16,17 +17,32 @@ namespace WebApiForm.Controllers
             _context = context;
         }
 
-        // GET: api/Sesions
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Sesion>>> GetSesions()
+        public async Task<ActionResult<IEnumerable<Questions_DTO>>> GetSesions()
         {
-            var result = await _context.Sesions.ToListAsync();
+            var result = await _context.Sesions
+                .Select(s => new Questions_DTO
+                {
+                    IdSesion = s.IdSesion,
+                    TipoRespuesta = s.TipoRespuesta,
+                    GrupoTema = s.GrupoTema,
 
-            //var preguntasResult = await _context.Preguntas.Where(p => result.Select(s => s.CodPregunta).Contains(p.CodPregunta)).ToListAsync();
+                    CodPregunta = s.CodPregunta, 
+                    Pregunta = s.CodPreguntaNavigation!.Pregunta1,
 
-            //return preguntasResult;
-            return result;
+                    CodSubPregunta = s.CodSubPregunta, 
+                    SubPregunta = s.CodSubPreguntaNavigation != null
+                        ? s.CodSubPreguntaNavigation.SubPreguntas
+                        : null,
+
+                    Estado = s.Estado ? 1 : 0,
+                    Rango = s.Rango
+                })
+                .ToListAsync();
+
+            return Ok(result);
         }
+
 
         // GET: api/Sesions/5
         [HttpGet("{id}")]

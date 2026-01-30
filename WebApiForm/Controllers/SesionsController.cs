@@ -17,8 +17,8 @@ namespace WebApiForm.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Questions_DTO>>> GetSesions()
+        [HttpGet("showQuestion")]
+        public async Task<ActionResult<IEnumerable<Questions_DTO>>> GetSesionQuestions()
         {
             var result = await _context.Sesions
                 .Select(s => new Questions_DTO
@@ -43,6 +43,12 @@ namespace WebApiForm.Controllers
             return Ok(result);
         }
 
+        // GET: api/Sesions
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Sesion>>> GetSesions()
+        {
+            return await _context.Sesions.ToListAsync();
+        }
 
         // GET: api/Sesions/5
         [HttpGet("{id}")]

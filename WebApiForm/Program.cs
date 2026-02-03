@@ -35,7 +35,7 @@ var DefaultConnection = $"Server={Environment.GetEnvironmentVariable("PR_DATABAS
                         $"TrustServerCertificate=True;";
 
 // Add services to the container.
-builder.Services.AddDbContext<FormEncuestaDbContext>(Options => Options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection")/*DefaultConnection*/));
+builder.Services.AddDbContext<FormEncuestaDbContext>(Options => Options.UseSqlServer(/*builder.Configuration.GetConnectionString("DBConnection")*/DefaultConnection));
 
 // Agrega el servicio de controladores
 builder.Services.AddControllers();

@@ -72,12 +72,12 @@ namespace WebApiForm.Capa_de_Servicio
                 }
 
                 var body = new Dictionary<string, string>
-            {
-                {"client_id", _clientId},
-                {"scope", "https://graph.microsoft.com/.default"},
-                {"client_secret", _clientSecret},
-                {"grant_type", "client_credentials"}
-            };
+                {
+                    {"client_id", _clientId},
+                    {"scope", "https://graph.microsoft.com/.default"},
+                    {"client_secret", _clientSecret},
+                    {"grant_type", "client_credentials"}
+                };
 
                 var response = await _httpClient.PostAsync(_tokenUrl, new FormUrlEncodedContent(body));
 
@@ -113,8 +113,8 @@ namespace WebApiForm.Capa_de_Servicio
                     Body = new Body { ContentType = "HTML", Content = htmlContent },
                     ToRecipients = new[]
                     {
-                    new Recipient { EmailAddress = new EmailAddress { Address = toEmail } }
-                }
+                        new Recipient { EmailAddress = new EmailAddress { Address = toEmail } }
+                    }
                 },
                 SaveToSentItems = false
             };

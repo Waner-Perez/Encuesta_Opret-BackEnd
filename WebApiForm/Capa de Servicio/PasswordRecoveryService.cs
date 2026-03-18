@@ -65,25 +65,17 @@ namespace WebApiForm.Capa_de_Servicio
 
             // Enlace del endpoint "reset"
             string resetLink = $"{token}";
+            string fullName = user.NombreApellido;
+            string userName = user.Usuario;
 
             string subject = "Recuperación de Contraseña";
-            //string plainTextContent = $"✨ Recuperación de Contraseña ✨\r\n\r\n" +
-            //    $"Hola,\r\n\r\n" +
-            //    $"Hemos recibido tu solicitud para restablecer tu contraseña. \r\n" +
-            //    $"Por favor, utiliza el enlace a continuación para continuar con el proceso:\r\n\r\n" +
-            //    $"🔗 Enlace de recuperación:\r\n" +
-            //    $"{resetLink}\r\n\r\n" +
-            //    $"⚠ Importante:\r\n" +
-            //    $"- Este enlace es válido por 1 hora.\r\n" +
-            //    $"- Si no solicitaste este cambio, puedes ignorar este mensaje.\r\n\r\n" +
-            //    $"Gracias,  " +
-            //    $"\r\nEquipo de Soporte Técnico\r\n";
+            
             string htmlContent = $@"
                 <div style='font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9; color: #333;'>
                     <h2 style='text-align: center; color: #667db6;'>✨ ¡Recupera tu Contraseña! ✨</h2>
                     <p style='font-size: 16px; line-height: 1.6;'>
-                        Hola, hemos recibido una solicitud para restablecer tu contraseña. Si no has solicitado esto, puedes ignorar este correo. 
-                        De lo contrario, sigue las instrucciones a continuación. 
+                        <strong>Nombre de Usuario: </strong>'{userName}'. <br><br>
+                        Hola <strong>{fullName}</strong>, hemos recibido una solicitud para restablecer tu contraseña vinculada a este correo. Si no has solicitado esto, puedes ignorar este mensaje.
                     </p>
                     <hr>
                     <p style='text-align: center; font-size: 16px;'>
@@ -105,7 +97,7 @@ namespace WebApiForm.Capa_de_Servicio
                 </div>
             ";
 
-            await _emailSender.SendEmail(email, subject,/* plainTextContent,*/ htmlContent);
+            await _emailSender.SendEmail(email, subject, htmlContent);
 
             return true;
         }

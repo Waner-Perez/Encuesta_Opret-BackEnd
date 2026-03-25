@@ -105,16 +105,32 @@ namespace WebApiForm.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEstacion(int id)
         {
-            var estacion = await _context.Estacions.FindAsync(id);
-            if (estacion == null)
+            try
             {
-                return NotFound();
+                var estacion = await _context.Estacions.FindAsync(id);
+                if (estacion == null)
+                {
+                    return NotFound(new { message = "La Estación no fue encontrada." });
+                }
+
+                _context.Estacions.Remove(estacion);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
             }
+            catch (DbUpdateException dbEx)
+            {
+                if (dbEx.InnerException != null && dbEx.InnerException.Message.Contains("fk_Estacion_linea"))
+                {
+                    return BadRequest(new { message = "Lo sentimos, esta Estación de metro no se puede eliminar, porque, ya tiene un formulario de registro de los Empleados." });
+                }
 
-            _context.Estacions.Remove(estacion);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+                return BadRequest(new { message = "Ocurrió un error en la base de datos", details = dbEx.InnerException?.Message ?? dbEx.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Ocurrió un error inesperado", details = ex.Message });
+            }
         }
 
         private bool EstacionExists(int id)

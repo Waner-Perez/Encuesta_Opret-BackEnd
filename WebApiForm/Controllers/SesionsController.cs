@@ -76,7 +76,7 @@ namespace WebApiForm.Controllers
 
             if (!ModelState.IsValid)
             {
-                return BadRequest("El modelo de la sesión no es válido.");
+                return BadRequest("El modelo de la Sección no es válido.");
             }
 
             _context.Entry(sesion).State = EntityState.Modified;
@@ -132,7 +132,7 @@ namespace WebApiForm.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Error al crear la Sesion", details = ex.Message });
+                return BadRequest(new { message = "Error al crear la Sección", details = ex.Message });
             }
         }
 
@@ -156,7 +156,7 @@ namespace WebApiForm.Controllers
             catch(DbUpdateException dbEx)
             {
                 if (dbEx.InnerException != null && dbEx.InnerException.Message.Contains("fk_Respuestas_Sesion")) 
-                    return BadRequest(new { message = "Lo sentimos esta Sección de pregunta esta siendo utilizado en la tabla de Respuestas por lo que no se podra elimiar." });
+                    return BadRequest(new { message = "Lo sentimos, esta Sección de pregunta no se puede eliminar, porque, ya tiene una respuesta." });
 
                 return BadRequest(new { message = "Ocurrió un error en la base de datos", details = dbEx.InnerException?.Message ?? dbEx.Message });
             }

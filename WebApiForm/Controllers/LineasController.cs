@@ -119,7 +119,7 @@ namespace WebApiForm.Controllers
             {
                 if(dbEx.InnerException != null && dbEx.InnerException.Message.Contains("fk_Estacion_linea"))
                 {
-                    return BadRequest(new { message = "No se puede borrar esta línea del metro porque hay estaciones que esta utilizando esta linea, para porder borrar esta linea primero deberas de borrar las estaciones que estan vinculados con esta." });
+                    return BadRequest(new { message = "Lo sentimos, esta Línea de metro no se puede eliminar, porque, ya tiene una Estación." });
                 }
 
                 return BadRequest(new { message = "Ocurrió un error en la base de datos", details = dbEx.InnerException?.Message ?? dbEx.Message });

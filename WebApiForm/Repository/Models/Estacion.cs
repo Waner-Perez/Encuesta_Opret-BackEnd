@@ -22,9 +22,12 @@ public partial class Estacion
     [Unicode(false)]
     public string? NombreEstacion { get; set; }
 
+    public int? Orden { get; set; }
+
     [JsonIgnore]
     [InverseProperty("IdEstacionNavigation")]
     public virtual ICollection<Formulario> Formularios { get; set; } = new List<Formulario>();
+    
     [JsonIgnore]
     [ForeignKey("IdLinea")]
     [InverseProperty("Estacions")]

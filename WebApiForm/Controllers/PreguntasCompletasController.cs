@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApiForm.Capa_de_Servicio;
 using WebApiForm.Services;
 
 namespace WebApiForm.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class PreguntasCompletasController : ControllerBase
     {

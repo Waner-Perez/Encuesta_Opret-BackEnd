@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiForm.Repository;
 using WebApiForm.Repository.Models;
@@ -6,6 +7,7 @@ using WebApiForm.Repository.Models;
 namespace WebApiForm.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class PreguntasController : ControllerBase
     {

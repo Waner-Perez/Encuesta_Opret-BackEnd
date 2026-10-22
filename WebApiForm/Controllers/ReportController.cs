@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApiForm.Capa_de_Servicio;
-using WebApiForm.Capa_de_Servicio.Exportacion;
 using WebApiForm.DTO__Data_Transfer_Object_;
 
 namespace WebApiForm.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {

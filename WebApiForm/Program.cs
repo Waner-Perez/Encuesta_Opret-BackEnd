@@ -1,77 +1,70 @@
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 using WebApiForm.Capa_de_Servicio;
+using WebApiForm.Capa_de_Servicio.Exportacion;
+using WebApiForm.Extension;
+using WebApiForm.Interfaces;
 using WebApiForm.Middleware;
 using WebApiForm.Repository;
-using WebApiForm.Interfaces;
-using WebApiForm.Capa_de_Servicio.Exportacion;
-using DotNetEnv;
 
 Env.Load(); // Lee y carga las variables en el entorno
 var builder = WebApplication.CreateBuilder(args);
+var config = builder.Configuration;
 
-// Configurar Kestrel para permitir conexiones externas
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    serverOptions.ListenAnyIP(7190); // Permite conexiones desde cualquier IP en el puerto 7190
-//});
+//var DefaultConnection = $"Server={Environment.GetEnvironmentVariable("PR_DATABASE_SERVER")}," +
+//                        $"{Environment.GetEnvironmentVariable("PR_DATABASE_PORT")}; " +
+//                        $"Database={Environment.GetEnvironmentVariable("PR_DATABASE_NAME")}; " +
+//                        $"User Id={Environment.GetEnvironmentVariable("PR_DATABASE_USER")}; " +
+//                        $"Password={Environment.GetEnvironmentVariable("PR_DATABASE_PASSWORD")}; " +
+//                        $"Encrypt=True;" +
+//                        $"TrustServerCertificate=True;";
 
-//builder.WebHost.ConfigureKestrel(serverOptions =>
-//{
-//    serverOptions.ListenAnyIP(7190, listenOptions =>
-//    {
-//        listenOptions.UseHttps(); // Habilita HTTPS en Kestrel
-//    });
-//});
-
-var DefaultConnection = $"Server={Environment.GetEnvironmentVariable("PR_DATABASE_SERVER")}," +
-                        $"{Environment.GetEnvironmentVariable("PR_DATABASE_PORT")}; " +
-                        $"Database={Environment.GetEnvironmentVariable("PR_DATABASE_NAME")}; " +
-                        $"User Id={Environment.GetEnvironmentVariable("PR_DATABASE_USER")}; " +
-                        $"Password={Environment.GetEnvironmentVariable("PR_DATABASE_PASSWORD")}; " +
-                        $"Encrypt=True;" +
-                        $"TrustServerCertificate=True;";
+var connectionTesting = config.GetConnectionString("DBConnection") ?? throw new InvalidOperationException("Connection string 'DBConnection' not found.");
 
 // Add services to the container.
-builder.Services.AddDbContext<FormEncuestaDbContext>(Options => Options.UseSqlServer(/*builder.Configuration.GetConnectionString("DBConnection")*/DefaultConnection));
+builder.Services.AddDbContext<FormEncuestaDbContext>(Options => Options.UseSqlServer(
+    connectionTesting
+    /*DefaultConnection*/
+));
 
 // Agrega el servicio de controladores
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-// Configura CORS (Cross-Origin Resource Sharing)
-builder.Services.AddCors(options =>
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
 {
-    options.AddPolicy("AllowAll",
-        policy =>
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApiForm", Version = "1.0" });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "JWT Authentication",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "JWT Bearer Token"
+    });
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
         {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+            },
+            Array.Empty<string>()
+        }
+    });
 });
 
 //Configuracion del Token
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"], // Definir el emisor del token
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])) // Utiliza la clave secreta obtenida del entorno
-    };
-});
-
-
+builder.Services.AddAuthentication(config);
 
 // Registrar el servicio en vace a stored procedure
 builder.Services.AddScoped<FormularioRepository>();
@@ -86,9 +79,17 @@ builder.Services.AddScoped<PasswordRecoveryService>();
 builder.Services.AddMemoryCache();
 //--------------------------------------------------------
 
-// Registrar el servicio de envío de correo electrónico
-//builder.Services.AddTransient<IEmailSender, SmtpEmailSender>();
-//builder.Services.AddTransient<PasswordRecoveryService>();
+// Configura CORS (Cross-Origin Resource Sharing)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
 
@@ -105,6 +106,8 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 // Usa CORS
 app.UseCors("AllowAll");
 
@@ -116,8 +119,6 @@ app.UseTokenBlacklist(); // Asegúrate de que este llamado esté después de la aut
 
 // Usa la autorización
 app.UseAuthorization();
-
-app.UseRouting();
 
 app.MapControllers();
 

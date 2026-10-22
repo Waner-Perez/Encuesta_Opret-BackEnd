@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Office.SpreadSheetML.Y2023.MsForms;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiForm.Repository;
@@ -7,6 +8,7 @@ using WebApiForm.Repository.Models;
 namespace WebApiForm.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class SesionsController : ControllerBase
     {

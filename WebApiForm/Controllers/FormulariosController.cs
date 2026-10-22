@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApiForm.Capa_de_Servicio;
@@ -13,6 +9,7 @@ using WebApiForm.Repository.Models;
 namespace WebApiForm.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class FormulariosController : ControllerBase
     {
@@ -108,29 +105,6 @@ namespace WebApiForm.Controllers
         {
             return _context.Formularios.Any(e => e.IdentifacadorForm == id);
         }
-
-        //[HttpGet("filtrarForm/{filtrarId}")]
-        //public async Task<ActionResult<IEnumerable<FiltrarFormularios_Dto>>> getFiltrarFormulario(string filtrarId)
-        //{
-        //    if (string.IsNullOrEmpty(filtrarId))
-        //    {
-        //        return BadRequest(new { message = "El parámetro de filtrado es requerido" });
-        //    }
-
-        //    try
-        //    {
-        //        var resultados = await _formularioServices.FiltrarFormularioAsyncServices(filtrarId);
-        //        if(resultados == null || !resultados.Any())
-        //        {
-        //            return NotFound();
-        //        }
-        //        return Ok(resultados);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(new { message = "Error al filtrar el formulario", details = ex.Message });
-        //    }
-        //}
 
         [HttpGet("ObtenerForm")]
         public async Task<ActionResult<List<ObtenerForm_Dto>>> getObtenerFormularios()

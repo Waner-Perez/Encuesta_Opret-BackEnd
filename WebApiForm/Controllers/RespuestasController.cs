@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WebApiForm.Capa_de_Servicio;
 using WebApiForm.DTO__Data_Transfer_Object_;
 using WebApiForm.Repository;
@@ -13,6 +14,7 @@ using WebApiForm.Repository.Models;
 namespace WebApiForm.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class RespuestasController : ControllerBase
     {

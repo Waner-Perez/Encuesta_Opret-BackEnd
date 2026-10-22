@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Operations;
-using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Plugins;
-using WebApiForm.Capa_de_Servicio;
 using WebApiForm.Capa_de_Servicio.Encrypt;
 using WebApiForm.Repository;
 using WebApiForm.Repository.Models;
-using WebApiForm.Services.DTO__Data_Transfer_Object_;
 
 namespace WebApiForm.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class RegistroUsuariosController : ControllerBase
@@ -108,6 +100,7 @@ namespace WebApiForm.Controllers
         // POST: api/RegistroUsuarios
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<RegistroUsuario>> PostRegistroUsuario(RegistroUsuario registroUsuario)
         {
             // Generar un salt usando la clase SaltHelper

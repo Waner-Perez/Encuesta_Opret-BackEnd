@@ -5,8 +5,8 @@ using WebApiForm.Services;
 
 namespace WebApiForm.Controllers
 {
-    [Route("api/[controller]")]
     [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class PreguntasCompletasController : ControllerBase
     {

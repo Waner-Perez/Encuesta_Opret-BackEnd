@@ -15,20 +15,20 @@ Env.Load(); // Lee y carga las variables en el entorno
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
 
-//var DefaultConnection = $"Server={Environment.GetEnvironmentVariable("PR_DATABASE_SERVER")}," +
-//                        $"{Environment.GetEnvironmentVariable("PR_DATABASE_PORT")}; " +
-//                        $"Database={Environment.GetEnvironmentVariable("PR_DATABASE_NAME")}; " +
-//                        $"User Id={Environment.GetEnvironmentVariable("PR_DATABASE_USER")}; " +
-//                        $"Password={Environment.GetEnvironmentVariable("PR_DATABASE_PASSWORD")}; " +
-//                        $"Encrypt=True;" +
-//                        $"TrustServerCertificate=True;";
+var DefaultConnection = $"Server={Environment.GetEnvironmentVariable("PR_DATABASE_SERVER")}," +
+                        $"{Environment.GetEnvironmentVariable("PR_DATABASE_PORT")}; " +
+                        $"Database={Environment.GetEnvironmentVariable("PR_DATABASE_NAME")}; " +
+                        $"User Id={Environment.GetEnvironmentVariable("PR_DATABASE_USER")}; " +
+                        $"Password={Environment.GetEnvironmentVariable("PR_DATABASE_PASSWORD")}; " +
+                        $"Encrypt=True;" +
+                        $"TrustServerCertificate=True;";
 
-var connectionTesting = config.GetConnectionString("DBConnection") ?? throw new InvalidOperationException("Connection string 'DBConnection' not found.");
+//var connectionTesting = config.GetConnectionString("DBConnection") ?? throw new InvalidOperationException("Connection string 'DBConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddDbContext<FormEncuestaDbContext>(Options => Options.UseSqlServer(
-    connectionTesting
-    /*DefaultConnection*/
+    //connectionTesting
+    DefaultConnection
 ));
 
 // Agrega el servicio de controladores

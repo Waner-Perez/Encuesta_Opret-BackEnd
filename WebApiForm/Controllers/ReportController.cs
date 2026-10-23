@@ -5,8 +5,8 @@ using WebApiForm.DTO__Data_Transfer_Object_;
 
 namespace WebApiForm.Controllers
 {
-    [ApiController]
     [Authorize]
+    [ApiController]
     [Route("api/[controller]")]
     public class ReportController : ControllerBase
     {

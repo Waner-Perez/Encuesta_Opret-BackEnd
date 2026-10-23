@@ -8,8 +8,8 @@ using WebApiForm.Repository.Models;
 
 namespace WebApiForm.Controllers
 {
-    [Route("api/[controller]")]
     [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class FormulariosController : ControllerBase
     {
